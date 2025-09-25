@@ -1,337 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>🔐 Deepak's Secure Files</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: #333;
-            transition: background 0.5s ease, color 0.5s ease;
-        }
-        body.dark-mode { background: #121212; color: #ddd; }
-        body.blue-theme { background: linear-gradient(135deg,#2980b9,#6dd5fa); }
-        body.green-theme { background: linear-gradient(135deg,#11998e,#38ef7d); }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        .container {
-            background: #fff;
-            border-radius: 15px;
-            padding: 40px;
-            width: 400px;
-            max-width: 95%;
-            text-align: center;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.3);
-            position: relative;
-            animation: fadeIn 0.8s ease;
-        }
-        body.dark-mode .container { background: #222; color: #ddd; }
-
-        @keyframes fadeIn {
-            from {opacity: 0; transform: translateY(20px);}
-            to {opacity: 1; transform: translateY(0);}
-        }
-
-        h1 { margin-bottom: 20px; font-size: 1.8rem; color: #4b2cc0; }
-        input {
-            width:100%; padding:14px; margin:10px 0;
-            border-radius:10px; font-size:1rem;
-            border:1px solid #ddd;
-        }
-        button {
-            width:100%; padding:14px;
-            background:#4b2cc0; color:white;
-            border:none; border-radius:10px; margin-top:10px;
-            transition: background 0.3s ease, transform 0.2s ease;
-        }
-        button:hover { background:#341c87; transform: scale(1.03); }
-
-        .file-link {
-            display:block; margin:12px 0;
-            background:#2575fc; color:white;
-            padding:14px; border-radius:10px;
-            text-decoration:none; font-weight:bold;
-            transition: background 0.3s ease;
-        }
-        .file-link:hover { background:#0b47c2; }
-        .file-disabled { background: gray !important; pointer-events: none; }
-
-        .error { color:red; margin-top:10px; font-weight:bold; }
-        .toggle-password { cursor:pointer; position:absolute; right:30px; top:178px; font-size:1.2rem; color:#666; }
-        .logout-button { background:#e74c3c; margin-top:20px; }
-        .info { font-size:0.9rem; color:#555; }
-        #adminHistory {
-            margin-top:15px; text-align:left;
-            max-height:150px; overflow-y:auto;
-            border:1px solid #ddd; padding:10px; border-radius:8px;
-            display:none; background:#f5f5f5;
-        }
-        body.dark-mode #adminHistory { background:#333; color:#ddd; border-color:#555; }
-
-        #adminBtn {
-            position: absolute; top: 10px; right: 10px;
-            width: 40px; height: 40px;
-            font-size: 18px; border-radius: 50%;
-        }
-
-        #adminModal {
-            display: none; position: fixed;
-            top:0; left:0; right:0; bottom:0;
-            background: rgba(0,0,0,0.6); z-index: 10000;
-            justify-content: center; align-items: center;
-        }
-        #adminModal .modalContent {
-            background: #fff; padding: 20px 30px;
-            border-radius: 10px; max-width: 350px; text-align: center;
-        }
-
-        /* Progress Bar */
-        #progressBar {
-            width:0%; height:6px; background:#4b2cc0;
-            border-radius:5px; margin-top:15px; transition:width 0.3s;
-        }
-    </style>
+  <title>YouTube Channel Info - Improved</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-<!-- Login Box -->
-<div class="container" id="loginBox">
-    <h1><i class="fa-solid fa-lock"></i> Login</h1>
-    <input type="text" id="nameInput" placeholder="Enter your name" />
-    <div style="position:relative;">
-        <input type="password" id="passInput" placeholder="Enter password" />
-        <span class="toggle-password" onclick="togglePassword()"><i class="fa-solid fa-eye"></i></span>
+
+  <!-- Login Page -->
+  <div class="card" id="welcome-screen">
+    <img src="inspire4ever_logo.jpg" class="circle-logo" />
+    <h1>ENTER CHANNEL NAME</h1>
+    <a href="https://www.instagram.com/deepak__823?igsh=MWx6cHB5Mzg4bDlmeA==" target="_blank">@deepak__823</a>
+    <input type="text" id="channel-name" placeholder="Enter channel name" />
+    <input type="password" id="channel-password" placeholder="Enter password" style="margin-top: 10px;" />
+    <button onclick="loadChannel()">Login ➜</button>
+  </div>
+
+  <!-- Main Dashboard -->
+  <div id="main-container" style="display: none;">
+    <h2 id="channel-subs">Subscribers: ...</h2>
+
+    <div id="video-select-container" style="display: none;">
+      <label for="video-select">SELECT VIDEO:</label>
+      <select id="video-select" onchange="showVideoDetails()"></select>
+      
     </div>
-    <p>Solve: <span id="captchaQ"></span></p>
-    <input type="number" id="captchaInput" placeholder="Enter CAPTCHA answer" />
-    <button onclick="checkLogin()">Login</button>
-    <p id="errorMsg" class="error"></p>
-</div>
 
-<!-- File Box -->
-<div class="container" id="fileBox" style="display:none;">
-    <h1><i class="fa-solid fa-file-lines"></i> Secure Downloads</h1>
-    <h3 id="greeting"></h3>
-    <p class="info" id="lastLogin"></p>
+    <div id="loading-spinner" style="display: none;">
+      <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading..." width="60" />
+    </div>
 
-    <!-- Download Links -->
-    <a href="#" id="file1" class="file-link" onclick="return handleDownload('file1','https://drive.google.com/uc?export=download&id=1BdMiJJTMK18X1mVTA0yc4hisfhcZZ0_i')">
-        <i class="fa-solid fa-download"></i> Download CAPCUT(DS) Folder
-    </a>
-    <p id="file1-count" class="info">Downloads: 0</p>
+    <div class="video-details" id="video-details" style="display: none;">
+      <a id="video-link" href="#" target="_blank" rel="noopener noreferrer">
+        <img id="video-thumb" class="video-thumb" src="" alt="Thumbnail" />
+      </a>
 
-    <a href="#" id="file2" class="file-link" onclick="return handleDownload('file2','https://drive.google.com/uc?export=download&id=12aAnZHF1HiNfaewmtKAIABw12haKOefc')">
-        <i class="fa-solid fa-download"></i> Download YT VIDEO
-    </a>
-    <p id="file2-count" class="info">Downloads: 0</p>
+      <div class="video-title" id="video-title"></div>
 
-    <a href="#" id="file3" class="file-link" onclick="return handleDownload('file3','https://drive.google.com/uc?export=download&id=1KagbCluqUbeJI-_OrsuZMMRIoLokeET3')">
-        <i class="fa-solid fa-download"></i> Part 1
-    </a>
-    <p id="file3-count" class="info">Downloads: 0</p>
+      <div class="video-script" id="video-script"></div>
+      <button class="copy-btn" id="copy-script-btn" onclick="copyScript()">📋 Copy Script</button>
 
-    <a href="#" id="file4" class="file-link" onclick="return handleDownload('file4','https://drive.google.com/uc?export=download&id=1ywOdwTocRP3CkTkKia0-bXzDMIwk7p7u')">
-        <i class="fa-solid fa-download"></i> Part 2
-    </a>
-    <p id="file4-count" class="info">Downloads: 0</p>
+      <div class="badges">
+        <div class="badge" id="video-views"></div>
+        <div class="badge" id="video-likes"></div>
+        <div class="badge" id="video-watch"></div>
+        <div class="badge" id="video-upload-time"></div>
+      </div>
 
-    <a href="#" id="file5" class="file-link" onclick="return handleDownload('file5','https://drive.google.com/uc?export=download&id=1pbQXVYWkpg4Ctj_Oq_Yrrs-x8PA5XzDK')">
-        <i class="fa-solid fa-download"></i> Part 3
-    </a>
-    <p id="file5-count" class="info">Downloads: 0</p>
-
-    <div id="progressBar"></div>
-    <div id="adminHistory"></div>
-
-    <button onclick="toggleDarkMode()"><i class="fa-solid fa-circle-half-stroke"></i> Toggle Dark Mode</button>
-    <button onclick="changeTheme()">🎨 Change Theme</button>
-    <button class="logout-button" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
-    <button id="adminBtn" onclick="showAdminModal()"><i class="fa-solid fa-user-tie"></i></button>
-</div>
-
-<!-- Admin Modal -->
-<div id="adminModal">
-    <div class="modalContent">
-        <h2>Admin Panel</h2>
-        <input type="password" id="adminPassInput" placeholder="Enter admin password" />
-        <br>
-        <button onclick="checkAdminPassword()">Login</button>
-        <button onclick="closeAdminModal()">Cancel</button>
-        <p id="adminError" style="color:red;"></p>
-
-        <div id="adminOptions" style="display:none; margin-top:15px;">
-            <button onclick="exportLogs()">📄 Export Logs</button>
-            <button onclick="toggleFile('file1')">Toggle File1</button>
-            <button onclick="toggleFile('file2')">Toggle File2</button>
-            <button onclick="toggleFile('file3')">Toggle File3</button>
-            <button onclick="toggleFile('file4')">Toggle File4</button>
-            <button onclick="toggleFile('file5')">Toggle File5</button>
-            <h3>Active Users</h3>
-            <div id="activeUsers"></div>
+      <div class="hashtags">
+        <div class="hashtag-text" id="video-hashtags"></div>
+        <div class="hashtag-actions">
+          <button class="copy-btn" onclick="copyHashtags()">📋 Copy Hashtags</button>
+          <button class="copy-btn" onclick="shareWhatsApp()">📱 Share WhatsApp</button>
+          <button class="copy-btn" onclick="shareTwitter()">🐦 Share Twitter</button>
         </div>
+      </div>
     </div>
-</div>
+  </div>
 
-<!-- EmailJS -->
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-<script>
-(function(){ emailjs.init("Q9tvGzvPWlJkVp47P"); })();
-
-let captchaAnswer, attempts=0;
-
-// CAPTCHA
-function generateCaptcha(){
-    const a=Math.floor(Math.random()*10)+1, b=Math.floor(Math.random()*10)+1;
-    captchaAnswer=a+b; document.getElementById('captchaQ').innerText=`${a}+${b}=?`;
-}
-
-// Login
-function checkLogin(){
-    const name=document.getElementById('nameInput').value.trim();
-    const pass=document.getElementById('passInput').value.trim();
-    const captcha=document.getElementById('captchaInput').value.trim();
-
-    if(parseInt(captcha)!==captchaAnswer){
-        document.getElementById('errorMsg').innerText='❌ Wrong CAPTCHA'; return;
-    }
-
-    if(name==="Deepak Suthar" && pass==="deepak95"){
-        const now=new Date().toLocaleString();
-        localStorage.setItem('loggedIn','true');
-        localStorage.setItem('lastLogin',now);
-        localStorage.setItem('username',name);
-
-        // Add to active users
-        let users=JSON.parse(localStorage.getItem('activeUsers')||'[]');
-        if(!users.includes(name)){ users.push(name); localStorage.setItem('activeUsers',JSON.stringify(users)); }
-
-        document.getElementById('lastLogin').innerText=`Last login: ${now}`;
-        document.getElementById('greeting').innerText=`Welcome, ${name} 👋`;
-        document.getElementById('loginBox').style.display='none';
-        document.getElementById('fileBox').style.display='block';
-        updateAdminHistory();
-    }else{
-        attempts++; document.getElementById('errorMsg').innerText='❌ Invalid credentials';
-        if(attempts>=3){ alert('⚠️ Too many attempts!'); document.getElementById('nameInput').disabled=true; document.getElementById('passInput').disabled=true; }
-    }
-}
-
-function logout(){
-    localStorage.removeItem('loggedIn');
-    let users=JSON.parse(localStorage.getItem('activeUsers')||'[]');
-    users=users.filter(u=>u!==localStorage.getItem('username'));
-    localStorage.setItem('activeUsers',JSON.stringify(users));
-    location.reload();
-}
-
-function togglePassword(){
-    const p=document.getElementById('passInput');
-    p.type=p.type==='password'?'text':'password';
-}
-function toggleDarkMode(){
-    document.body.classList.toggle('dark-mode');
-    localStorage.setItem('darkMode',document.body.classList.contains('dark-mode'));
-}
-function changeTheme(){
-    const themes=['','dark-mode','blue-theme','green-theme'];
-    let current=themes.find(t=>document.body.classList.contains(t))||'';
-    let next=themes[(themes.indexOf(current)+1)%themes.length];
-    document.body.className='';
-    if(next) document.body.classList.add(next);
-    localStorage.setItem('theme',next);
-}
-
-// Download with Progress + Email Alert
-function handleDownload(id,url){
-    const disabled=localStorage.getItem(id+'-disabled');
-    if(disabled==='true'){ alert('⛔ This file is disabled by Admin'); return false; }
-
-    let bar=document.getElementById('progressBar'); bar.style.width="0%";
-    let p=0; let interval=setInterval(()=>{ p+=20; bar.style.width=p+"%"; if(p>=100){ clearInterval(interval); }},300);
-
-    let count=parseInt(localStorage.getItem(id)||'0')+1;
-    localStorage.setItem(id,count);
-    document.getElementById(`${id}-count`).innerText=`Downloads: ${count}`;
-
-    let history=JSON.parse(localStorage.getItem(`${id}-history`)||'[]');
-    history.push({user:localStorage.getItem('username'), time:new Date().toLocaleString()});
-    localStorage.setItem(`${id}-history`,JSON.stringify(history));
-    updateAdminHistory();
-
-    // EmailJS alert
-    emailjs.send("service_raye6pj","template_koh0jyo",{
-        file_name:id,
-        download_time:new Date().toLocaleString(),
-        total_downloads:count,
-        user:localStorage.getItem('username')
-    });
-
-    setTimeout(()=>{ window.open(url,'_blank'); },2000);
-    return false;
-}
-
-// Admin
-function updateAdminHistory(){
-    if(localStorage.getItem('isAdmin')!=='true') return;
-    const c=document.getElementById('adminHistory');
-    c.innerHTML='<strong>Download History:</strong><br>';
-    ['file1','file2','file3','file4','file5'].forEach(f=>{
-        let h=JSON.parse(localStorage.getItem(`${f}-history`)||'[]');
-        h.slice(-5).forEach(x=>{ c.innerHTML+=`${f}: ${x.user} - ${x.time}<br>`; });
-    });
-    c.style.display='block';
-}
-function showAdminModal(){ document.getElementById('adminModal').style.display='flex'; }
-function closeAdminModal(){ document.getElementById('adminModal').style.display='none'; }
-function checkAdminPassword(){
-    if(document.getElementById('adminPassInput').value==='deepak33'){
-        localStorage.setItem('isAdmin','true');
-        document.getElementById('adminOptions').style.display='block';
-        updateAdminHistory(); loadActiveUsers();
-    } else { document.getElementById('adminError').innerText="❌ Wrong Password"; }
-}
-function toggleFile(id){
-    let disabled=localStorage.getItem(id+'-disabled')==='true';
-    localStorage.setItem(id+'-disabled',!disabled);
-    document.getElementById(id).classList.toggle('file-disabled',!disabled);
-}
-function loadActiveUsers(){
-    let users=JSON.parse(localStorage.getItem('activeUsers')||'[]');
-    document.getElementById('activeUsers').innerHTML=users.join('<br>')||'No Active Users';
-}
-function exportLogs(){
-    let data="File,User,Time\n";
-    ['file1','file2','file3','file4','file5'].forEach(f=>{
-        let h=JSON.parse(localStorage.getItem(`${f}-history`)||'[]');
-        h.forEach(x=>{ data+=`${f},${x.user},${x.time}\n`; });
-    });
-    let blob=new Blob([data],{type:"text/csv"});
-    let a=document.createElement('a');
-    a.href=URL.createObjectURL(blob); a.download="download_logs.csv"; a.click();
-}
-
-// Init
-window.onload=()=>{
-    generateCaptcha();
-    if(localStorage.getItem('loggedIn')==='true'){
-        document.getElementById('loginBox').style.display='none';
-        document.getElementById('fileBox').style.display='block';
-        document.getElementById('lastLogin').innerText=`Last login: ${localStorage.getItem('lastLogin')}`;
-        document.getElementById('greeting').innerText=`Welcome, ${localStorage.getItem('username')} 👋`;
-        updateAdminHistory();
-    }
-    ['file1','file2','file3','file4','file5'].forEach(f=>{
-        document.getElementById(`${f}-count`).innerText=`Downloads: ${localStorage.getItem(f)||0}`;
-        if(localStorage.getItem(f+'-disabled')==='true'){ document.getElementById(f).classList.add('file-disabled'); }
-    });
-    let theme=localStorage.getItem('theme'); if(theme) document.body.classList.add(theme);
-};
-</script>
+  <!-- Script -->
+  <script src="script.js"></script>
 </body>
 </html>
