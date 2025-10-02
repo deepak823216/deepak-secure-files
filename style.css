@@ -1,0 +1,122 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f0f0f0;
+}
+
+/* 🌈 Gradient Header */
+header {
+  background: linear-gradient(90deg, #ff512f, #dd2476);
+  color: white;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+/* ⬅ Back Button (bottom style) */
+.back-btn {
+  display: block;
+  text-align: center;
+  margin: 10px auto 0;
+  padding: 12px;
+  background: #444;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  width: 220px;
+  transition: 0.3s;
+}
+
+.back-btn:hover {
+  background: #222;
+  transform: scale(1.05);
+}
+
+
+/* 📖 Main Card Container */
+.container {
+  max-width: 700px;
+  margin: 20px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+/* 🚘 Car Image */
+img {
+  width: 100%;
+  border-radius: 12px;
+}
+
+/* 🏷 Car Name */
+h2 {
+  text-align: center;
+  margin: 20px 0 10px 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+/* 📝 Description */
+p {
+  text-align: justify;
+  line-height: 1.6;
+  white-space: pre-line; /* preserve line breaks */
+  color: #555;
+}
+
+.download-btn {
+  display:block; /* 👈 अब हमेशा दिखेगा */
+  text-align:center;
+  padding:15px;
+  background:#28a745;
+  color:white;
+  text-decoration:none;
+  border-radius:5px;
+  margin:20px auto;
+  width:200px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.3);
+  transition:0.3s;
+}
+
+
+/* ✨ Hover Glow */
+.download-btn:hover {
+  background: #218838;
+  transform: translateX(-50%) scale(1.05);
+  box-shadow: 0 8px 20px rgba(40,167,69,0.6);
+}
+
+/* 🎬 Fade-in Animation */
+.fade-in {
+  animation: fadeIn 1s ease-in forwards;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 1.2rem;
+  }
+  .container {
+    margin: 15px;
+    padding: 15px;
+  }
+  .download-btn {
+    width: 180px;
+    padding: 12px;
+  }
+}
