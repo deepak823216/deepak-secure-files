@@ -29,7 +29,7 @@
         <span data-value="4">☆</span>
         <span data-value="5">☆</span>
       </div>
-      <p class="rating-text">Average Rating: 0</p>
+      <p class="rating-text">Ratings: 0</p>
     </div>
 
     <div class="car-card" data-id="car2" data-name="Scorpio S11">
@@ -42,7 +42,7 @@
         <span data-value="4">☆</span>
         <span data-value="5">☆</span>
       </div>
-      <p class="rating-text">Average Rating: 0</p>
+      <p class="rating-text">Ratings: 0</p>
     </div>
 
     <div class="car-card" data-id="car3" data-name="Racer X">
@@ -55,10 +55,8 @@
         <span data-value="4">☆</span>
         <span data-value="5">☆</span>
       </div>
-      <p class="rating-text">Average Rating: 0</p>
+      <p class="rating-text">Ratings: 0</p>
     </div>
-
-    <!-- Add more cars similarly -->
   </div>
 
   <script>
@@ -82,23 +80,22 @@
       window.location.href = `car.html?id=${carId}`;
     }
 
-    // ⭐ Rating System with Firebase
+    // ⭐ Rating System with Firebase (live for all users)
     document.querySelectorAll(".car-card").forEach(card => {
       const carId = card.dataset.id;
       const stars = card.querySelectorAll(".rating span");
       const ratingText = card.querySelector(".rating-text");
       const carRef = db.ref('cars/' + carId);
 
-      // 🔹 Load initial average rating
-      carRef.once('value').then(snapshot => {
+      // 🔹 Real-time listener
+      carRef.on('value', snapshot => {
         const data = snapshot.val();
         const avg = data && data.ratingCount > 0 ? Math.round(data.totalRating / data.ratingCount) : 0;
-        ratingText.innerText = `Average Rating: ${avg}`;
         highlightStars(stars, avg);
+        ratingText.innerText = `Ratings: ${avg}`;
       });
 
       stars.forEach(star => {
-        // Hover highlight
         star.addEventListener("mouseover", () => highlightStars(stars, star.dataset.value));
         star.addEventListener("mouseout", () => {
           carRef.once('value').then(snapshot => {
@@ -119,13 +116,6 @@
               currentData = { totalRating: ratingValue, ratingCount: 1 };
             }
             return currentData;
-          }).then(() => {
-            carRef.once('value').then(snapshot => {
-              const data = snapshot.val();
-              const avg = data && data.ratingCount > 0 ? Math.round(data.totalRating / data.ratingCount) : 0;
-              ratingText.innerText = `Average Rating: ${avg}`;
-              highlightStars(stars, avg);
-            });
           });
         });
       });
@@ -144,7 +134,6 @@
     // 🔎 Search Functionality
     const searchBox = document.getElementById("searchBox");
     const cards = document.querySelectorAll(".car-card");
-
     searchBox.addEventListener("keyup", () => {
       const query = searchBox.value.toLowerCase();
       cards.forEach(card => {
